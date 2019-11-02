@@ -1,0 +1,43 @@
+-- Deletions/Views
+USE klin88assign2db;
+-- delete doctor who got his/her license before 1965-01-01
+DELETE FROM doctor WHERE licenseddate < "1965-01-01";
+-- error : the delete command did not delete the rows because other table is referencing this key
+-- Create a view that shows the all the patients first names and last names who are treated by the heads of hospitals,
+-- that were made heads after Dec 31, 1995. In this view, also display the doctor's last name and the hospital name
+CREATE VIEW v
+AS
+SELECT
+    patient.firstname,
+    patient.lastname,
+    doctor.lastname AS doctorlastname,
+    hospital.hospitalname
+FROM
+    patient
+INNER JOIN treats 
+    ON patient.ohipnumber = treats.ohipnumber
+INNER JOIN hospital
+    ON hospital.headID = treats.licencenumber
+INNER JOIN doctor
+    ON hospital.headID = doctor.licencenumber
+WHERE hospital.headstartdate > "1995-12-31";
+-- show the view named v
+SELECT * FROM v;
+-- show the doctor table
+SELECT * FROM doctor;
+-- show the treats table
+SELECT * FROM treats;
+-- Delete the doctor with a last name of Clooney
+DELETE FROM doctor WHERE lastname = "Clooney";
+-- delete suceefully because we set ON DELETE CASCADE
+-- show the doctor table
+SELECT * FROM doctor;
+-- show the treats table
+SELECT * FROM treats;
+-- delete all the Surgeons
+DELETE FROM doctor WHERE specialty = "Surgeon";
+-- error :the delete command did not delete the rows because other table is referencing this key and it is not ON DELETE CASCADE
+-- show the doctor table
+SELECT * FROM doctor;
+-- show the treats table
+SELECT * FROM treats;

@@ -1,0 +1,61 @@
+-- show datas
+USE klin88assign2db;
+-- query 1
+SELECT lastname 
+FROM patient; 
+-- query 2
+SELECT DISTINCT lastname 
+FROM patient;
+-- query 3
+SELECT * 
+FROM doctor GROUP BY lastname;
+-- query 4
+SELECT hospitalname, hospitalcode 
+FROM hospital 
+WHERE numberofbeds > 1500;
+-- query 5
+SELECT firstname, lastname 
+FROM doctor 
+WHERE hospitalcode = (SELECT hospitalcode FROM hospital WHERE hospitalname="St. Joseph");
+-- query 6
+SELECT firstname, lastname 
+FROM patient 
+WHERE LEFT(lastname,1)="G";
+-- query 7
+SELECT firstname, lastname 
+FROM patient 
+WHERE ohipnumber IN (SELECT ohipnumber FROM treats WHERE licencenumber IN (SELECT licencenumber FROM doctor WHERE lastname = "Clooney"));
+-- query 8
+SELECT hospitalname, 
+    city, 
+    doctor.lastname 
+FROM hospital 
+INNER JOIN doctor 
+WHERE hospital.headID = doctor.licencenumber;
+-- query 9
+SELECT SUM(numberofbeds) AS "Total Number of Beds" 
+FROM hospital;
+-- query 10
+SELECT
+    patient.firstname,
+    doctor.firstname
+FROM
+    patient
+INNER JOIN treats 
+    ON patient.ohipnumber = treats.ohipnumber
+INNER JOIN hospital
+    ON hospital.headID = treats.licencenumber
+INNER JOIN doctor
+    ON hospital.headID = doctor.licencenumber;
+-- querty 11
+SELECT firstname, lastname 
+FROM doctor 
+WHERE specialty = 'Surgeon' AND hospitalcode IN (SELECT hospitalcode FROM hospital WHERE hospitalname = "Victoria");
+-- query 12
+SELECT firstname 
+FROM doctor 
+WHERE licencenumber NOT IN (SELECT licencenumber FROM treats);
+-- query 13
+SELECT lastname, firstname 
+FROM doctor 
+WHERE licencenumber IN (SELECT licencenumber FROM treats GROUP BY licencenumber HAVING COUNT(*)>1);

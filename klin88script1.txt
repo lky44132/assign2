@@ -1,0 +1,54 @@
+-- show the databases
+SHOW DATABASES;
+-- drop database klin88assign2db if exists
+DROP DATABASE IF EXISTS klin88assign2db;
+-- then create klin88assign2db
+CREATE DATABASE klin88assign2db;
+-- use the database
+USE klin88assign2db;
+-- give permission to TA
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON klin88assign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+-- show that no table at the beginning
+SHOW tables;
+
+-- create doctor table
+CREATE TABLE doctor (
+    firstname VARCHAR(20), 
+    lastname VARCHAR(20), 
+    licencenumber VARCHAR(4) NOT NULL,PRIMARY KEY (licencenumber),
+    licenseddate DATE, 
+    specialty VARCHAR(30),
+    hospitalcode VARCHAR(3)
+    );
+-- create patient table
+CREATE TABLE patient (
+    ohipnumber INT(9) NOT NULL, PRIMARY KEY (ohipnumber),
+    firstname VARCHAR(20), 
+    lastname VARCHAR(20)
+    );
+-- create hospital table
+CREATE TABLE hospital (
+    hospitalcode VARCHAR(3) NOT NULL, PRIMARY KEY (hospitalcode), 
+    hospitalname VARCHAR(30),
+    city VARCHAR(20), 
+    province VARCHAR(2), 
+    numberofbeds INT, 
+    headID VARCHAR(4) NOT NULL, 
+    headstartdate DATE, FOREIGN KEY (headID) REFERENCES doctor(licencenumber)
+    );
+-- create treats table
+CREATE TABLE treats (
+    ohipnumber INT(9) NOT NULL,
+    licencenumber VARCHAR(4) NOT NULL, 
+    PRIMARY KEY (ohipnumber,licencenumber),
+    FOREIGN KEY (licencenumber) REFERENCES doctor(licencenumber) ON DELETE CASCADE, 
+    FOREIGN KEY (ohipnumber) REFERENCES patient(ohipnumber)
+    );
+-- add the foreign key to the doctor
+ALTER TABLE doctor ADD FOREIGN KEY (hospitalcode) REFERENCES hospital(hospitalcode);
+-- show the table again
+SHOW tables;

@@ -1,0 +1,159 @@
+Warning: Using a password on the command line interface can be insecure.
+ERROR 1451 (23000) at line 4: Cannot delete or update a parent row: a foreign key constraint fails (`klin88assign2db`.`hospital`, CONSTRAINT `hospital_ibfk_1` FOREIGN KEY (`headID`) REFERENCES `doctor` (`licencenumber`))
+--------------
+DELETE FROM doctor WHERE licenseddate < "1965-01-01"
+--------------
+
+--------------
+CREATE VIEW v
+AS
+SELECT
+    patient.firstname,
+    patient.lastname,
+    doctor.lastname AS doctorlastname,
+    hospital.hospitalname
+FROM
+    patient
+INNER JOIN treats 
+    ON patient.ohipnumber = treats.ohipnumber
+INNER JOIN hospital
+    ON hospital.headID = treats.licencenumber
+INNER JOIN doctor
+    ON hospital.headID = doctor.licencenumber
+WHERE hospital.headstartdate > "1995-12-31"
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT * FROM v
+--------------
+
++-----------+----------+----------------+--------------+
+| firstname | lastname | doctorlastname | hospitalname |
++-----------+----------+----------------+--------------+
+| Bill      | Gellar   | Shabado        | St. Joseph   |
+| Colleen   | Gellar   | Shabado        | St. Joseph   |
+| Scotty    | Bing     | Shabado        | St. Joseph   |
++-----------+----------+----------------+--------------+
+3 rows in set (0.01 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-----------+------------+---------------+--------------+--------------+--------------+
+| firstname | lastname   | licencenumber | licenseddate | specialty    | hospitalcode |
++-----------+------------+---------------+--------------+--------------+--------------+
+| Bubble    | Blue       | DD66          | 2000-09-09   | Urologist    | BBC          |
+| Joey      | Shabado    | GD56          | 1960-06-24   | Podiatrist   | BBC          |
+| Ross      | Clooney    | HT45          | 1987-06-20   | Surgeon      | DDE          |
+| Mandy     | Webster    | JK78          | 1990-08-08   | Surgeon      | BBC          |
+| Bernie    | Kavorikian | RD34          | 1980-09-09   | Urologist    | BBC          |
+| Colleen   | Aziz       | SE66          | 1989-08-24   | Surgeon      | ABC          |
+| Ben       | Spock      | YT67          | 1955-02-20   | Pediatrician | DDE          |
++-----------+------------+---------------+--------------+--------------+--------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++------------+---------------+
+| ohipnumber | licencenumber |
++------------+---------------+
+|  888888888 | DD66          |
+|  110112113 | GD56          |
+|  333444555 | GD56          |
+|  667766777 | GD56          |
+|  111222111 | HT45          |
+|  111222333 | HT45          |
+|  444555666 | HT45          |
+|  667766777 | HT45          |
+|  111222333 | JK78          |
+|  444555666 | JK78          |
+|  667766777 | JK78          |
+|  111222333 | SE66          |
++------------+---------------+
+12 rows in set (0.00 sec)
+
+--------------
+DELETE FROM doctor WHERE lastname = "Clooney"
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-----------+------------+---------------+--------------+--------------+--------------+
+| firstname | lastname   | licencenumber | licenseddate | specialty    | hospitalcode |
++-----------+------------+---------------+--------------+--------------+--------------+
+| Bubble    | Blue       | DD66          | 2000-09-09   | Urologist    | BBC          |
+| Joey      | Shabado    | GD56          | 1960-06-24   | Podiatrist   | BBC          |
+| Mandy     | Webster    | JK78          | 1990-08-08   | Surgeon      | BBC          |
+| Bernie    | Kavorikian | RD34          | 1980-09-09   | Urologist    | BBC          |
+| Colleen   | Aziz       | SE66          | 1989-08-24   | Surgeon      | ABC          |
+| Ben       | Spock      | YT67          | 1955-02-20   | Pediatrician | DDE          |
++-----------+------------+---------------+--------------+--------------+--------------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++------------+---------------+
+| ohipnumber | licencenumber |
++------------+---------------+
+|  888888888 | DD66          |
+|  110112113 | GD56          |
+|  333444555 | GD56          |
+|  667766777 | GD56          |
+|  111222333 | JK78          |
+|  444555666 | JK78          |
+|  667766777 | JK78          |
+|  111222333 | SE66          |
++------------+---------------+
+8 rows in set (0.00 sec)
+
+ERROR 1451 (23000) at line 38: Cannot delete or update a parent row: a foreign key constraint fails (`klin88assign2db`.`hospital`, CONSTRAINT `hospital_ibfk_1` FOREIGN KEY (`headID`) REFERENCES `doctor` (`licencenumber`))
+--------------
+DELETE FROM doctor WHERE specialty = "Surgeon"
+--------------
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-----------+------------+---------------+--------------+--------------+--------------+
+| firstname | lastname   | licencenumber | licenseddate | specialty    | hospitalcode |
++-----------+------------+---------------+--------------+--------------+--------------+
+| Bubble    | Blue       | DD66          | 2000-09-09   | Urologist    | BBC          |
+| Joey      | Shabado    | GD56          | 1960-06-24   | Podiatrist   | BBC          |
+| Mandy     | Webster    | JK78          | 1990-08-08   | Surgeon      | BBC          |
+| Bernie    | Kavorikian | RD34          | 1980-09-09   | Urologist    | BBC          |
+| Colleen   | Aziz       | SE66          | 1989-08-24   | Surgeon      | ABC          |
+| Ben       | Spock      | YT67          | 1955-02-20   | Pediatrician | DDE          |
++-----------+------------+---------------+--------------+--------------+--------------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++------------+---------------+
+| ohipnumber | licencenumber |
++------------+---------------+
+|  888888888 | DD66          |
+|  110112113 | GD56          |
+|  333444555 | GD56          |
+|  667766777 | GD56          |
+|  111222333 | JK78          |
+|  444555666 | JK78          |
+|  667766777 | JK78          |
+|  111222333 | SE66          |
++------------+---------------+
+8 rows in set (0.00 sec)
+
+Bye

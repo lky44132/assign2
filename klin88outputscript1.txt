@@ -1,0 +1,137 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SHOW DATABASES
+--------------
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| klin88assign2db    |
+| mysql              |
+| performance_schema |
+| test               |
+| vetoffice          |
+| vetoofice          |
++--------------------+
+7 rows in set (0.00 sec)
+
+--------------
+DROP DATABASE IF EXISTS klin88assign2db
+--------------
+
+Query OK, 4 rows affected (0.40 sec)
+
+--------------
+CREATE DATABASE klin88assign2db
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+GRANT USAGE ON *.* TO 'ta'@'localhost'
+--------------
+
+Query OK, 0 rows affected (0.01 sec)
+
+--------------
+DROP USER 'ta'@'localhost'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+GRANT ALL PRIVILEGES ON klin88assign2db.* TO 'ta'@'localhost'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+FLUSH PRIVILEGES
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SHOW tables
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+CREATE TABLE doctor (
+    firstname VARCHAR(20), 
+    lastname VARCHAR(20), 
+    licencenumber VARCHAR(4) NOT NULL,PRIMARY KEY (licencenumber),
+    licenseddate DATE, 
+    specialty VARCHAR(30),
+    hospitalcode VARCHAR(3)
+    )
+--------------
+
+Query OK, 0 rows affected (0.04 sec)
+
+--------------
+CREATE TABLE patient (
+    ohipnumber INT(9) NOT NULL, PRIMARY KEY (ohipnumber),
+    firstname VARCHAR(20), 
+    lastname VARCHAR(20)
+    )
+--------------
+
+Query OK, 0 rows affected (0.07 sec)
+
+--------------
+CREATE TABLE hospital (
+    hospitalcode VARCHAR(3) NOT NULL, PRIMARY KEY (hospitalcode), 
+    hospitalname VARCHAR(30),
+    city VARCHAR(20), 
+    province VARCHAR(2), 
+    numberofbeds INT, 
+    headID VARCHAR(4) NOT NULL, 
+    headstartdate DATE, FOREIGN KEY (headID) REFERENCES doctor(licencenumber)
+    )
+--------------
+
+Query OK, 0 rows affected (0.27 sec)
+
+--------------
+CREATE TABLE treats (
+    ohipnumber INT(9) NOT NULL,
+    licencenumber VARCHAR(4) NOT NULL, 
+    PRIMARY KEY (ohipnumber,licencenumber),
+    FOREIGN KEY (licencenumber) REFERENCES doctor(licencenumber) ON DELETE CASCADE, 
+    FOREIGN KEY (ohipnumber) REFERENCES patient(ohipnumber)
+    )
+--------------
+
+Query OK, 0 rows affected (0.07 sec)
+
+--------------
+ALTER TABLE doctor ADD FOREIGN KEY (hospitalcode) REFERENCES hospital(hospitalcode)
+--------------
+
+Query OK, 0 rows affected (0.20 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+--------------
+SHOW tables
+--------------
+
++---------------------------+
+| Tables_in_klin88assign2db |
++---------------------------+
+| doctor                    |
+| hospital                  |
+| patient                   |
+| treats                    |
++---------------------------+
+4 rows in set (0.00 sec)
+
+Bye
